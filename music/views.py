@@ -124,7 +124,10 @@ def favorite_album(request, album_id):
 
 def index(request):
     if not request.user.is_authenticated():
-        return render(request, 'music/login.html')
+        
+        albums = Album.objects.all()
+        # return render(request, 'music/login.html')
+        return render(request, 'music/home.html', {'albums': albums})
     else:
         albums = Album.objects.filter(user=request.user)
         song_results = Song.objects.all()
@@ -143,6 +146,10 @@ def index(request):
             })
         else:
             return render(request, 'music/index.html', {'albums': albums})
+
+        
+def login(request):
+    return render(request, 'music/login.html')
 
 
 def logout_user(request):
