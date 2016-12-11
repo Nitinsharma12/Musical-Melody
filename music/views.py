@@ -3,6 +3,7 @@ from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
+
 from .forms import AlbumForm, SongForm, UserForm
 from .models import Album, Song
 
@@ -124,7 +125,7 @@ def favorite_album(request, album_id):
 
 def index(request):
     if not request.user.is_authenticated():
-        
+
         albums = Album.objects.all()
         # return render(request, 'music/login.html')
         return render(request, 'music/home.html', {'albums': albums})
@@ -147,7 +148,12 @@ def index(request):
         else:
             return render(request, 'music/index.html', {'albums': albums})
 
-        
+
+def trending(request):
+    songs = Song.objects.filter(is_favorite=True)
+    return render(request, 'music/trending_songs.html', {'songs': songs})
+
+
 def login(request):
     return render(request, 'music/login.html')
 
@@ -189,8 +195,8 @@ def register(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
-                login(request, user)
-                albums = Album.objects.filter(user=request.user)
+                # login(request)
+                albums = Album.objects.all()
                 return render(request, 'music/index.html', {'albums': albums})
     context = {
         "form": form,
