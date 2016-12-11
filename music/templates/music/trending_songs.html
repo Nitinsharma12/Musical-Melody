@@ -28,6 +28,7 @@
                                 <th>Audio File</th>
                                 <th>Album</th>
                                 <th>Favorite</th>
+                                <th>Download</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,6 +51,9 @@
                                     </td>
                                     <td>
                                         <a href="{% url 'music:favorite' song.id %}" class="btn-favorite"><span class="glyphicon glyphicon-star {% if song.is_favorite %}active{% endif %}"></span></a>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'music:download' song.audio_file %}">Download</a>
                                     </td>
                                 </tr>
                             {% endfor %}

@@ -1,9 +1,14 @@
+import os
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
+from wsgiref.util import FileWrapper
+import mimetypes
 
+from website import settings
 from .forms import AlbumForm, SongForm, UserForm
 from .models import Album, Song
 
@@ -152,6 +157,17 @@ def index(request):
 def trending(request):
     songs = Song.objects.filter(is_favorite=True)
     return render(request, 'music/trending_songs.html', {'songs': songs})
+
+
+def download(request, file_name):
+    file_path = settings.MEDIA_ROOT + '/' + file_name
+    file_wrapper = FileWrapper(file(file_path, 'rb'))
+    file_mimetype = mimetypes.guess_type(file_path)
+    response = HttpResponse(file_wrapper, content_type=file_mimetype)
+    response['X-Sendfile'] = file_path
+    response['Content-Length'] = os.stat(file_path).st_size
+    response['Content-Disposition'] = 'attachment; filename=%s' % str(file_name)
+    return response
 
 
 def login(request):

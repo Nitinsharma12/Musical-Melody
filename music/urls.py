@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^login_user/$', views.login_user, name='login_user'),
     url(r'^logout_user/$', views.logout_user, name='logout_user'),
     url(r'^trending/$', views.trending, name='trending'),
+    url(r'^download/(?P<file_name>.+)$', views.download, name='download'),
     url(r'^(?P<album_id>[0-9]+)/$', views.detail, name='detail'),
     url(r'^(?P<song_id>[0-9]+)/favorite/$', views.favorite, name='favorite'),
     url(r'^songs/(?P<filter_by>[a-zA_Z]+)/$', views.songs, name='songs'),
